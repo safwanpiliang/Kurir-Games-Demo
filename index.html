@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kurir Nusantara (Prototipe Three.js)</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <canvas id="game"></canvas>
+
+    <div id="hud" class="hidden">
+      <div id="click-hint" class="hidden">Klik layar untuk mengunci kamera, atau tahan klik kiri lalu geser</div>
+      <div id="toast"></div>
+      <div id="fps" class="hidden"></div>
+    </div>
+
+    <!-- Menu mulai -->
+    <div id="menu-start" class="overlay">
+      <div class="panel">
+        <h1>Kurir Nusantara</h1>
+        <p class="subtitle">Prototipe Three.js</p>
+        <p class="lead">Antar paket rapuh melewati tiga desa dataran tinggi. Jaga dirimu, dan jaga paketnya.</p>
+        <div class="buttons">
+          <button id="btn-start" class="primary">Mulai</button>
+        </div>
+        <div class="controls">
+          <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> Bergerak</div>
+          <div><kbd>Mouse</kbd> Putar kamera</div>
+          <div><kbd>Space</kbd> Melompat</div>
+          <div><kbd>Shift</kbd> Berlari (tahan)</div>
+          <div><kbd>E</kbd> Berinteraksi</div>
+          <div><kbd>Esc</kbd> Jeda</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu jeda -->
+    <div id="menu-pause" class="overlay hidden">
+      <div class="panel">
+        <h2>Jeda</h2>
+        <div class="buttons">
+          <button id="btn-resume" class="primary">Lanjutkan</button>
+          <button id="btn-mouse-mode">Kontrol mouse: Otomatis</button>
+          <button id="btn-to-menu">Kembali ke menu utama</button>
+        </div>
+        <p class="note">Mode <b>Drag</b>: tahan klik kiri lalu geser untuk memutar kamera (cadangan bila pointer lock bermasalah).</p>
+      </div>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
