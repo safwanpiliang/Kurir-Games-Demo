@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { CONFIG } from './config.js';
-import { PATH } from './Level.js';
+import { PATH, RAVINE, RIVER } from './Level.js';
 
 // Value noise sederhana (deterministik) untuk variasi bentuk bukit.
 function hash2(ix, iz) {
@@ -35,6 +35,12 @@ export function smoothstep(a, b, x) {
   return t * t * (3 - 2 * t);
 }
 
+// Turunkan terrain ke floorY di dalam pita |z - zc| < half, dengan transisi selebar edge
+function carveBand(z, y, zc, half, edge, floorY) {
+  const s = smoothstep(half + edge, half, Math.abs(z - zc));
+  return s > 0 ? Math.min(y, y + (floorY - y) * s) : y;
+}
+
 // Jarak titik ke polyline jalur, plus tinggi dan lebar jalur yang diinterpolasi.
 export function pathInfo(x, z) {
   let best = { d: Infinity, h: 0, w: 0, seg: 0, t: 0 };
@@ -64,7 +70,11 @@ export class Terrain {
     this.segments = W.segments;
     this.cell = this.size / this.segments;
     this.half = this.size / 2;
-    this.carves = []; // fungsi pemotong tambahan (jurang, sungai) — diisi fase berikutnya
+    // Pemotong terrain: hanya menurunkan tinggi (jurang dan alur sungai)
+    this.carves = [
+      (x, z, y) => carveBand(z, y, RAVINE.zc, RAVINE.halfWidth, RAVINE.edge, RAVINE.floorY),
+      (x, z, y) => carveBand(z, y, RIVER.zc, RIVER.halfWidth, RIVER.bank, RIVER.bedY),
+    ];
 
     const n = this.segments + 1;
     this.heights = new Float32Array(n * n);

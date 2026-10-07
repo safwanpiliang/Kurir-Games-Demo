@@ -10,6 +10,23 @@
     <canvas id="game"></canvas>
 
     <div id="hud" class="hidden">
+      <div id="vignette"></div>
+      <div id="bars">
+        <div class="bar-row" id="bar-player">
+          <span class="bar-label">Kurir</span>
+          <div class="bar"><div class="bar-fill"></div><div class="bar-ghost"></div></div>
+          <span class="bar-value">100</span>
+          <span class="bar-delta"></span>
+        </div>
+        <div class="bar-row" id="bar-package">
+          <span class="bar-label">Paket</span>
+          <div class="bar"><div class="bar-fill"></div><div class="bar-ghost"></div></div>
+          <span class="bar-value">100</span>
+          <span class="bar-delta"></span>
+        </div>
+      </div>
+      <div id="objective"><span class="obj-title">Tujuan</span><span id="objective-text"></span></div>
+      <div id="prompt" class="hidden"><kbd>E</kbd> <span id="prompt-text"></span></div>
       <div id="click-hint" class="hidden">Klik layar untuk mengunci kamera, atau tahan klik kiri lalu geser</div>
       <div id="toast"></div>
       <div id="fps" class="hidden"></div>
@@ -45,6 +62,34 @@
           <button id="btn-to-menu">Kembali ke menu utama</button>
         </div>
         <p class="note">Mode <b>Drag</b>: tahan klik kiri lalu geser untuk memutar kamera (cadangan bila pointer lock bermasalah).</p>
+      </div>
+    </div>
+
+    <!-- Layar kalah -->
+    <div id="menu-lost" class="overlay hidden">
+      <div class="panel">
+        <h2 id="lost-title">Paket hancur!</h2>
+        <p id="lost-reason" class="lead"></p>
+        <div class="buttons">
+          <button id="btn-retry" class="primary">Ulangi dari checkpoint</button>
+          <button id="btn-lost-menu">Menu utama</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layar menang -->
+    <div id="menu-won" class="overlay hidden">
+      <div class="panel">
+        <h2>Paket terantar!</h2>
+        <p class="lead">Penerima di Kaki Bukit menerima paketnya.</p>
+        <div class="stats">
+          <div><span>Sisa health paket</span><b id="won-package">100</b></div>
+          <div><span>Waktu tempuh</span><b id="won-time">00:00</b></div>
+        </div>
+        <div class="buttons">
+          <button id="btn-play-again" class="primary">Main lagi</button>
+          <button id="btn-won-menu">Menu utama</button>
+        </div>
       </div>
     </div>
 

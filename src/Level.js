@@ -29,6 +29,39 @@ export const PATH = [
 // yaw 0 = menghadap -z (utara)
 export const SPAWN = { x: 0, z: 140, yaw: 0 };
 
+// Jurang yang diseberangi jembatan rapuh (memotong terrain sepanjang sumbu x)
+export const RAVINE = { zc: 49, halfWidth: 7, edge: 1.2, floorY: -5.5 };
+
+// Sungai dangkal yang mengalir sepanjang sumbu x
+export const RIVER = { zc: -30, halfWidth: 6, bank: 3, bedY: 0.4, surfaceY: 1.3 };
+
+// Penempatan hazard (angka balance ada di config.js)
+export const HAZARD_LAYOUT = {
+  // Trigger diatur supaya kurir yang berjalan tertimpa, yang berlari atau berhenti selamat
+  fallingTree: { trigger: { x: 8, z: 93.5 }, pivot: { x: 13.5, z: 91 } },
+  fragileBridge: {
+    x: 12, zStart: 58, zEnd: 40, y: 2.6,
+    missing: [6], // papan yang sudah lapuk sejak awal (harus dilompati)
+    // Ramp kayu untuk naik kembali dari dasar jurang ke tepi selatan
+    ramp: { bottom: { x: 34, z: 53.5 }, top: { x: 18, z: 53.5 } },
+  },
+  river: {
+    // Batu pijakan di atas air (alternatif menyeberang tanpa basah)
+    stones: [
+      { x: 17.0, z: -23.5 }, { x: 16.0, z: -26.0 }, { x: 17.2, z: -28.5 },
+      { x: 15.8, z: -31.0 }, { x: 16.6, z: -33.6 }, { x: 15.4, z: -36.2 },
+    ],
+  },
+  fallingRocks: {
+    trigger: { x: 9, z: -60, r: 6 },
+    laneZ: [-66, -78],       // rentang z tempat batu menyeberang jalur
+    fromX: -14, toX: 13,     // dari lereng barat ke tepi timur jalur
+  },
+};
+
+// SEMENTARA (Fase 2): masuk area ini = menang. Diganti serah-terima ke penerima (E) di Fase 3.
+export const TEMP_GOAL = { x: 0, z: -125, r: 6 };
+
 // ---------------------------------------------------------------------------
 // SEMENTARA (Fase 1): peti dan ramp di Lembah Padi untuk menguji lompat,
 // naik anak tangga, dan raycast pijakan. Diganti rumah dan properti desa di Fase 3.

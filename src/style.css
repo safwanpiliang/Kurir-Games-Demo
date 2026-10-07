@@ -153,3 +153,132 @@ kbd {
   font: bold 11px monospace;
   text-align: center;
 }
+
+/* ---------- Bar health ---------- */
+#bars {
+  position: absolute;
+  left: 20px;
+  top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--panel);
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 52px 220px 34px 40px;
+  align-items: center;
+  gap: 8px;
+}
+.bar-label { font-weight: bold; font-size: 14px; }
+.bar-value { font: bold 14px monospace; text-align: right; }
+.bar-delta {
+  font: bold 14px monospace;
+  color: var(--red);
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+.bar-delta.show { opacity: 1; transition: none; }
+
+.bar {
+  position: relative;
+  height: 14px;
+  border-radius: 7px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.bar-fill, .bar-ghost {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 100%;
+  border-radius: 7px;
+}
+.bar-ghost { background: rgba(255, 255, 255, 0.55); transition: width 0.6s 0.25s; z-index: 0; }
+.bar-fill { z-index: 1; transition: width 0.12s, background 0.3s; }
+
+#bar-player .bar-fill { background: linear-gradient(90deg, #e76f51, #f4a261); }
+#bar-player .bar-label { color: #f4a261; }
+#bar-package .bar-fill { background: linear-gradient(90deg, #2a9d8f, #3dff9a); }
+#bar-package .bar-label { color: var(--gold); }
+#bar-package.critical .bar-fill { background: linear-gradient(90deg, #b5261b, #ff3d2e); animation: pulse 0.5s infinite alternate; }
+
+.bar-row.hit { animation: shake 0.3s; }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+@keyframes pulse { from { opacity: 1; } to { opacity: 0.55; } }
+
+/* ---------- Tujuan dan petunjuk E ---------- */
+#objective {
+  position: absolute;
+  right: 20px;
+  top: 18px;
+  max-width: 340px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--panel);
+  font-size: 15px;
+  line-height: 1.35;
+}
+.obj-title {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 2px;
+}
+
+#prompt {
+  position: absolute;
+  left: 50%;
+  bottom: 26%;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: var(--panel);
+  border: 1px solid rgba(233, 196, 106, 0.6);
+  font-size: 16px;
+}
+#prompt kbd { font-size: 13px; }
+
+/* Kilatan merah saat kurir terluka */
+#vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(200, 30, 20, 0.55));
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+#vignette.show { opacity: 1; transition: none; }
+#vignette.package { background: radial-gradient(ellipse at center, transparent 60%, rgba(255, 190, 40, 0.45)); }
+
+/* ---------- Layar menang ---------- */
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 20px;
+}
+.stats div {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(244, 236, 216, 0.08);
+}
+.stats b { color: var(--gold); font-size: 18px; }
+
+/* Layar sempit: tujuan pindah ke bawah bar health */
+@media (max-width: 960px) {
+  #objective { left: 20px; right: auto; top: 98px; max-width: calc(100vw - 40px); }
+  #toast { top: 190px; white-space: normal; text-align: center; width: max-content; max-width: calc(100vw - 40px); }
+  .bar-row { grid-template-columns: 48px minmax(80px, 160px) 34px 36px; }
+}

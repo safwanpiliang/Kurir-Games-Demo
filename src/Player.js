@@ -73,10 +73,18 @@ export class Player {
     this.armL = makeLimb(0.12, 0.55, shirt, -0.38, 1.3);
     this.armR = makeLimb(0.12, 0.55, shirt, 0.38, 1.3);
 
-    // Titik pegangan paket (dipakai Package.js di fase 2), di depan dada
+    // Paket digendong di punggung supaya selalu terlihat dari kamera belakang
     this.carrySocket = new THREE.Object3D();
-    this.carrySocket.position.set(0, 1.05, -0.42);
+    this.carrySocket.position.set(0, 1.12, 0.48);
+    this.carrySocket.rotation.x = -0.12;
     body.add(this.carrySocket);
+    // Tali gendongan
+    const strapMat = flatMat('#5a3b22');
+    for (const sx of [-0.16, 0.16]) {
+      const strap = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.62, 0.62), strapMat);
+      strap.position.set(sx, 1.12, 0.06);
+      body.add(strap);
+    }
 
     root.traverse((o) => { if (o.isMesh) o.castShadow = true; });
     this.body = body;

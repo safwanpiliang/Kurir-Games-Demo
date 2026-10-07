@@ -21,6 +21,61 @@ export const CONFIG = {
     turnSpeed: 12,           // kecepatan badan berputar menghadap arah gerak
   },
 
+  health: {
+    playerMax: 100,
+  },
+
+  package: {
+    maxHealth: 100,
+    size: [0.55, 0.42, 0.42],  // lebar, tinggi, tebal (m)
+    hitRadius: 0.45,         // bola tabrakan paket untuk hazard "kena langsung"
+    criticalRatio: 0.3,      // di bawah ini indikator merah dan berdenyut
+    glowIntensity: 0.9,      // kekuatan emissive pita indikator
+  },
+
+  // Mendarat dari ketinggian: damage paket = (kecepatanJatuh - safeSpeed) * perSpeed
+  // Lompat biasa mendarat ~7.5 m/s; safeSpeed 10 ≈ jatuh bebas 2 m.
+  fallDamage: {
+    safeSpeed: 10,
+    perSpeed: 2.5,
+    max: 60,
+  },
+
+  hazards: {
+    fallingTree: {
+      triggerRadius: 5,      // jarak kurir ke titik trigger
+      warnTime: 0.6,         // pohon bergoyang dulu (s)
+      fallTime: 0.9,         // durasi tumbang (s)
+      length: 10,            // panjang batang (m)
+      trunkRadius: 0.4,
+      hitMargin: 0.5,        // toleransi area tertimpa
+      playerDamage: 20,
+      packageDamage: 25,
+    },
+    fragileBridge: {
+      plankLength: 1.5,      // panjang tiap papan sepanjang jembatan
+      width: 2.4,
+      fallDelay: 1.0,        // detik setelah diinjak sebelum papan jatuh
+      respawnTime: 6,        // detik sampai papan kembali
+      // Benturan paket saat jatuh ke jurang memakai fallDamage di atas
+    },
+    river: {
+      packageDamagePerSecond: 5,
+      speedMultiplier: 0.75, // kurir melambat di air
+    },
+    fallingRocks: {
+      count: 5,
+      spawnInterval: 0.45,   // jeda antar batu (s)
+      speed: 9,              // m/s
+      radiusMin: 0.7,
+      radiusMax: 1.2,       // batu besar setinggi dada bisa mengenai paket
+      cooldown: 10,          // detik sebelum trigger bisa aktif lagi
+      playerDamage: 20,
+      packageDamage: 25,     // hanya bila batu mengenai paket langsung
+      knockback: 6,
+    },
+  },
+
   camera: {
     fov: 60,
     distance: 6.0,           // jarak kamera ke kurir
