@@ -9,6 +9,7 @@ import { Hud } from './Hud.js';
 import { Health } from './Health.js';
 import { Package } from './Package.js';
 import { Save } from './Save.js';
+import { PostFX } from './PostFX.js';
 import { findInteractable } from './Interactable.js';
 import { applyHazardDamage, fallDamageFor } from './hazards/Hazard.js';
 import { FallingTree } from './hazards/FallingTree.js';
@@ -33,6 +34,8 @@ const camera = new THREE.PerspectiveCamera(CONFIG.camera.fov, window.innerWidth 
 // ---------- Sistem game ----------
 const world = new World(scene);
 const collision = new Collision(world.terrain);
+world.addVegetation(collision);
+const postfx = new PostFX(renderer, scene, camera);
 
 const player = new Player(collision);
 scene.add(player.mesh);
@@ -49,6 +52,8 @@ hud.bindHealth('bar-package', pkg.health);
 
 const settings = Save.loadSettings();
 input.mouseMode = settings.mouseMode;
+postfx.setBloom(settings.bloom);
+hud.setBloom(settings.bloom);
 
 // Konteks bersama untuk hazard dan level
 const ctx = {
@@ -220,8 +225,20 @@ hud.onToggleMouseMode = () => {
   settings.mouseMode = input.mouseMode;
   Save.writeSettings(settings);
   hud.setMouseMode(input.mouseMode);
+hud.onToggleBloom = () => {
+  settings.bloom = !settings.bloom;
+  Save.writeSettings(settings);
+  postfx.setBloom(settings.bloom);
+  hud.setBloom(settings.bloom);
+};
 };
 hud.setMouseMode(input.mouseMode);
+hud.onToggleBloom = () => {
+  settings.bloom = !settings.bloom;
+  Save.writeSettings(settings);
+  postfx.setBloom(settings.bloom);
+  hud.setBloom(settings.bloom);
+};
 
 input.onLockChange = (locked) => {
   // Browser melepas pointer lock saat Esc ditekan -> jeda
@@ -244,6 +261,7 @@ window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  postfx.setSize(window.innerWidth, window.innerHeight);
 });
 // Simpan waktu tempuh bila tab ditutup di tengah permainan
 window.addEventListener('beforeunload', () => { if (mode !== 'menu' && mode !== 'won') persist(); });
@@ -288,9 +306,9 @@ function tick(dt) {
   level.update(dt);
   pkg.update(dt);
   chase.update(dt, player.position);
-  world.update(dt, player.position);
+  world.update(dt, player.position, camera);
   hud.update(dt);
-  if (!debugNoRender) renderer.render(scene, camera);
+  if (!debugNoRender) postfx.render();
 }
 let debugNoRender = false; // hanya diubah dari konsol debug untuk simulasi cepat
 

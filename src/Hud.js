@@ -33,6 +33,7 @@ export class Hud {
     this.onRetry = () => {};
     this.onPlayAgain = () => {};
     this.onContinue = () => {};
+    this.onToggleBloom = () => {};
 
     $('btn-start').addEventListener('click', () => this.onStart());
     $('btn-resume').addEventListener('click', () => this.onResume());
@@ -43,6 +44,7 @@ export class Hud {
     $('btn-play-again').addEventListener('click', () => this.onPlayAgain());
     $('btn-won-menu').addEventListener('click', () => this.onToMenu());
     $('btn-continue').addEventListener('click', () => this.onContinue());
+    $('btn-bloom').addEventListener('click', () => this.onToggleBloom());
     this.#setupKeypad();
 
     this._toastTimer = 0;
@@ -196,6 +198,10 @@ export class Hud {
       void panel.offsetWidth;
       panel.classList.add('wrong');
     }
+  }
+
+  setBloom(on) {
+    $('btn-bloom').textContent = `Bloom: ${on ? 'Aktif' : 'Nonaktif'}`;
   }
 
   setMouseMode(mode) {

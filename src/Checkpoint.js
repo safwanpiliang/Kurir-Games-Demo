@@ -36,8 +36,8 @@ export class Checkpoint {
   setActive(on) {
     this.active = on;
     this.clothMat.emissive.copy(on ? ACTIVE : IDLE);
-    this.clothMat.color.set(on ? '#c99a2e' : '#1d6b62');
-    this.clothMat.emissiveIntensity = on ? 0.9 : 0.25;
+    this.clothMat.color.set(on ? '#b8862a' : '#1d6b62');
+    this.clothMat.emissiveIntensity = on ? 0.35 : 0.15;
   }
 
   update(dt) {

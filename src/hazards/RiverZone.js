@@ -5,6 +5,7 @@ import { Hazard } from './Hazard.js';
 /**
  * Area sungai: selama kaki kurir berada di bawah permukaan air, paket rusak sedikit demi sedikit.
  * Batu pijakan memungkinkan menyeberang tanpa basah bila lompatannya tepat.
+ * Permukaan air (shader) dibuat di World.js.
  */
 export class RiverZone extends Hazard {
   constructor(ctx, river, layout) {
@@ -13,19 +14,8 @@ export class RiverZone extends Hazard {
     this.inWater = false;
     this._accum = 0;
 
-    // Permukaan air sementara; diganti ShaderMaterial di Fase 4
-    const width = (river.halfWidth + river.bank) * 2;
-    const geo = new THREE.PlaneGeometry(ctx.terrain.size, width, 1, 1);
-    geo.rotateX(-Math.PI / 2);
-    this.water = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
-      color: '#2fa3a0', transparent: true, opacity: 0.78, roughness: 0.2, metalness: 0.1,
-    }));
-    this.water.position.set(0, river.surfaceY, river.zc);
-    this.water.receiveShadow = true;
-    ctx.scene.add(this.water);
-
     // Batu pijakan
-    const stoneMat = new THREE.MeshStandardMaterial({ color: '#8d8a80', flatShading: true });
+    const stoneMat = new THREE.MeshStandardMaterial({ color: '#b3ad9f', flatShading: true, roughness: 0.9 });
     for (const s of layout.stones) {
       const bed = ctx.terrain.heightAt(s.x, s.z);
       const top = river.surfaceY + 0.25;

@@ -102,7 +102,7 @@ const HOUSES = [
   { x: 0, z: -146, yaw: 0, w: 7, d: 5, roof: '#c9a035' }, // rumah penerima
 ];
 
-const PADDIES = [
+export const PADDIES = [
   { x: 11, z: 131, w: 8, d: 5 }, { x: 11, z: 137, w: 8, d: 5, color: '#b5c85a' },
   { x: -12, z: 130, w: 7, d: 5 }, { x: -20, z: 136, w: 6, d: 7, color: '#b5c85a' },
   { x: 0, z: 172, w: 12, d: 6 },

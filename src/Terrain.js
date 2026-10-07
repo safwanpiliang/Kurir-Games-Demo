@@ -179,6 +179,8 @@ export class Terrain {
     const grassA = new THREE.Color('#6fae4a');
     const grassB = new THREE.Color('#4f9a6a'); // kehijauan-tosca
     const gold = new THREE.Color('#c9b458');   // rumput kering keemasan
+    const sand = new THREE.Color('#d6c08e');   // tepian dan dasar sungai
+    const gravel = new THREE.Color('#7f6d58'); // dasar jurang
     const c = new THREE.Color();
     const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3(), nrm = new THREE.Vector3();
 
@@ -192,15 +194,21 @@ export class Terrain {
 
       const p = pathInfo(cx, cz);
       const n = fbm(cx * 0.05 + 10, cz * 0.05);
-      if (steep > 0.45) {
+      const fh = (pos[f + 1] + pos[f + 4] + pos[f + 7]) / 3;
+      const inRiver = Math.abs(cz - RIVER.zc) < RIVER.halfWidth + RIVER.bank + 1.5 && fh < RIVER.surfaceY + 0.45;
+      const inRavine = Math.abs(cz - RAVINE.zc) < RAVINE.halfWidth + 0.5 && fh < RAVINE.floorY + 1.5;
+      if (inRiver) {
+        c.copy(sand).offsetHSL(0, 0, n * 0.05);
+      } else if (inRavine) {
+        c.copy(gravel).offsetHSL(0, 0, n * 0.06);
+      } else if (steep > 0.45) {
         c.copy(rock).offsetHSL(0, 0, n * 0.05);
       } else if (p.d < W.pathHalfWidth + n * 0.4) {
         c.copy(dirt).offsetHSL(0, 0, n * 0.04);
       } else {
         c.copy(grassA).lerp(grassB, smoothstep(-0.3, 0.6, n));
-        const height = (pos[f + 1] + pos[f + 4] + pos[f + 7]) / 3;
         c.lerp(gold, smoothstep(0.2, 0.7, fbm(cx * 0.02 - 7, cz * 0.02 + 3)) * 0.6);
-        c.offsetHSL(0, 0, Math.min(0.08, height * 0.002));
+        c.offsetHSL(0, 0, Math.min(0.08, fh * 0.002));
         if (steep > 0.3) c.lerp(rock, (steep - 0.3) / 0.15);
       }
       for (let k = 0; k < 3; k++) {

@@ -112,10 +112,28 @@ export const CONFIG = {
   },
 
   render: {
-    maxPixelRatio: 1.5,
+    maxPixelRatio: 1.25,     // turunkan ke 1 bila FPS rendah di laptop
     shadows: true,
     shadowMapSize: 2048,
     shadowRange: 45,         // radius area bayangan di sekitar kurir
+    fogNear: 70,
+    fogFar: 280,
+    // Post-processing (bloom bisa dimatikan dari menu jeda)
+    bloomStrength: 0.55,
+    bloomRadius: 0.5,
+    bloomThreshold: 0.9,     // hanya bagian yang sangat terang (emissive) yang berpendar
+    saturation: 1.12,        // color grading
+    contrast: 1.06,
+    warmth: 0.04,            // geser ke hangat (senja)
+    vignette: 0.28,
+  },
+
+  vegetation: {
+    pineCount: 450,
+    roundCount: 260,
+    grassCount: 9000,
+    treeSway: 0.06,
+    grassSway: 0.12,
   },
 
   sim: {

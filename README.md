@@ -34,7 +34,10 @@ Semua angka balance ada di `src/config.js`; simpan file dan Vite memuat ulang ga
 | `health`, `package` | health awal kurir dan paket, ambang kritis indikator |
 | `fallDamage` | damage paket saat mendarat: `(kecepatanJatuh - safeSpeed) * perSpeed` |
 | `hazards.*` | damage, waktu, dan jarak tiap hazard |
-| `camera`, `render`, `world` | kamera, bayangan, bentuk terrain |
+| `interact`, `puzzles` | jarak tombol E, durasi animasi gerbang |
+| `camera`, `world` | kamera, bentuk terrain |
+| `render` | pixel ratio, bayangan, fog, bloom, color grading |
+| `vegetation` | jumlah pohon/rumput dan kekuatan goyangan |
 
 Posisi desa, jalur, dan hazard (data level) ada di `src/Level.js`.
 
@@ -76,9 +79,62 @@ Semua damage hazard lewat satu fungsi `applyHazardDamage()` di `src/hazards/Haza
 - Save dihapus setelah menang (tidak ada lagi yang dilanjutkan).
 - Kode gembok tetap (bukan acak per permainan) supaya mudah diuji.
 
+## Visual (Fase 4)
+
+- Flat shading low-poly dengan palet hijau, tosca, dan keemasan.
+- Matahari senja dari sudut rendah dengan shadow map, HemisphereLight, kubah langit gradasi, dan `Fog`.
+- `EffectComposer`: bloom (`UnrealBloomPass`), color grading (saturasi, kontras, hangat, vignette), lalu `OutputPass`.
+  Bloom bisa dimatikan dari menu jeda (pilihan disimpan).
+- Shader air (`ShaderMaterial`, `src/shaders/water.js`): gradasi dangkal–dalam, gelombang, garis arus, busa di tepi dan di sekitar batu pijakan.
+- Goyangan daun/rumput/padi lewat vertex shader yang disuntikkan ke `MeshStandardMaterial` (`src/shaders/foliage.js`), termasuk bayangannya.
+- Pohon, rumput, dan padi memakai `InstancedMesh`.
+- Semua aset dari geometri bawaan Three.js. Model glTF CC0 (Kenney/Quaternius) belum dipakai; taruh di `public/assets/` bila ingin diganti.
+
+## Performa
+
+Diukur di browser pane pengembangan: ±13 ms GPU per frame pada kanvas 3,4 MP (bloom ±1 ms, vegetasi ±2 ms),
+logika game ±0,04 ms. Bila FPS rendah di laptop:
+1. Matikan bloom di menu jeda.
+2. Turunkan `render.maxPixelRatio` ke `1`.
+3. Kurangi `vegetation.grassCount` / `pineCount`, atau `render.shadowMapSize` ke `1024`.
+
+## Deploy statis
+
+`npm run build` menghasilkan `dist/` dengan path relatif (`base: './'` di `vite.config.js`), jadi bisa langsung diunggah.
+
+- **Netlify**: build command `npm run build`, publish directory `dist`.
+- **GitHub Pages**: unggah isi `dist/` ke branch `gh-pages` (mis. `npx gh-pages -d dist`) atau pakai GitHub Actions resmi "Deploy static content to Pages" dengan path `dist`.
+
+## Struktur kode
+
+```
+src/
+  main.js          renderer, game loop, state (menu/main/jeda/kalah/menang), progres
+  config.js        semua angka balance
+  World.js         terrain, langit, cahaya, fog, air, vegetasi
+  Terrain.js       heightmap koridor jalur, jurang, sungai
+  Vegetation.js    pohon, rumput, padi (InstancedMesh)
+  Level.js         data tata letak, teks tujuan, penyusun desa/puzzle/checkpoint
+  Player.js        controller kinematik + model kurir
+  ChaseCamera.js   kamera orang ketiga
+  Input.js         keyboard, pointer lock, mode drag
+  Collision.js     collider lingkaran/kotak + raycast pijakan
+  Health.js        takeDamage / heal / onDeath (kurir & paket)
+  Package.js       paket + indikator emissive
+  Interactable.js  kelas dasar objek tombol E
+  Checkpoint.js    trigger desa
+  Save.js          localStorage
+  Hud.js           bar health, tujuan, petunjuk E, menu, gembok kode
+  PostFX.js        bloom + color grading
+  props.js         rumah, pagar, papan, warga, lampion, sawah
+  hazards/         Hazard (applyHazardDamage), FallingTree, FragileBridge, RiverZone, FallingRocks
+  puzzles/         Gate, Lever, KeyPickup, LockedGate, CodeLock, Recipient
+  shaders/         water.js, foliage.js
+```
+
 ## Status
 
 - [x] Fase 1 – Dasar: Vite, game loop, terrain low-poly, kurir (WASD, lompat, lari), kamera orang ketiga, pointer lock + drag
 - [x] Fase 2 – Inti mekanik: Health (kurir & paket), indikator emissive paket, 4 hazard + fall damage, HUD, menang/kalah
 - [x] Fase 3 – Level dan puzzle: 3 desa, checkpoint + save, tuas/kunci/kode lewat kelas Interactable, serah-terima paket
-- [ ] Fase 4 – Polesan visual
+- [x] Fase 4 – Polesan visual: langit + fog + cahaya senja, bloom (opsional) + color grading, shader air & goyangan daun, InstancedMesh untuk vegetasi
