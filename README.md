@@ -38,6 +38,19 @@ Semua angka balance ada di `src/config.js`; simpan file dan Vite memuat ulang ga
 
 Posisi desa, jalur, dan hazard (data level) ada di `src/Level.js`.
 
+## Alur permainan
+
+| Desa | Puzzle (tombol E) | Lanjut ke |
+|---|---|---|
+| 1. Lembah Padi | Tarik **tuas** di dekat rumah warga untuk membuka gerbang desa | Jalur hutan (kayu tumbang) dan jembatan rapuh |
+| 2. Tepi Sungai | Ambil **kunci** di meja salah satu rumah, buka gerbang menuju sungai | Sungai dan lereng batu longsor |
+| 3. Kaki Bukit | Cari tiga papan angka **I, II, III**, masukkan **kode** di gembok pagar | Serahkan paket ke Bu Ratna = menang |
+
+Tiap desa adalah checkpoint. Saat tiba, game menyimpan posisi, health paket, nomor desa,
+status puzzle, dan waktu tempuh ke `localStorage` (`kurirNusantara.save.v1`).
+Menu utama menampilkan **Lanjutkan** bila ada save; **Mulai** menghapus save dan memulai dari awal.
+Kode gembok ada di `PUZZLES.code` pada `src/Level.js`.
+
 ## Aturan damage (dari GDD)
 
 | Hazard | Kurir | Paket |
@@ -58,10 +71,14 @@ Semua damage hazard lewat satu fungsi `applyHazardDamage()` di `src/hazards/Haza
 - Sungai memperlambat kurir (`speedMultiplier`). Batu pijakan memberi jalan menyeberang tanpa basah.
 - Kalah: kembali ke checkpoint terakhir dengan health kurir penuh dan health paket sesuai yang tersimpan. Waktu tempuh termasuk percobaan ulang.
 - Fall damage hanya mengenai paket (GDD tidak menyebut damage jatuh ke kurir).
+- Selain isi minimal GDD (posisi, health paket, nomor desa), save juga menyimpan status puzzle (langsung saat diselesaikan) dan waktu tempuh, supaya respawn tidak memaksa mengulang puzzle.
+- Posisi yang disimpan adalah titik spawn checkpoint desa, bukan posisi persis kurir.
+- Save dihapus setelah menang (tidak ada lagi yang dilanjutkan).
+- Kode gembok tetap (bukan acak per permainan) supaya mudah diuji.
 
 ## Status
 
 - [x] Fase 1 – Dasar: Vite, game loop, terrain low-poly, kurir (WASD, lompat, lari), kamera orang ketiga, pointer lock + drag
 - [x] Fase 2 – Inti mekanik: Health (kurir & paket), indikator emissive paket, 4 hazard + fall damage, HUD, menang/kalah
-- [ ] Fase 3 – Level dan puzzle
+- [x] Fase 3 – Level dan puzzle: 3 desa, checkpoint + save, tuas/kunci/kode lewat kelas Interactable, serah-terima paket
 - [ ] Fase 4 – Polesan visual

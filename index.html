@@ -39,6 +39,7 @@
         <p class="subtitle">Prototipe Three.js</p>
         <p class="lead">Antar paket rapuh melewati tiga desa dataran tinggi. Jaga dirimu, dan jaga paketnya.</p>
         <div class="buttons">
+          <button id="btn-continue" class="primary hidden">Lanjutkan<small id="continue-info"></small></button>
           <button id="btn-start" class="primary">Mulai</button>
         </div>
         <div class="controls">
@@ -62,6 +63,24 @@
           <button id="btn-to-menu">Kembali ke menu utama</button>
         </div>
         <p class="note">Mode <b>Drag</b>: tahan klik kiri lalu geser untuk memutar kamera (cadangan bila pointer lock bermasalah).</p>
+      </div>
+    </div>
+
+    <!-- Gembok kode 3 digit -->
+    <div id="keypad" class="overlay hidden">
+      <div class="panel">
+        <h2>Gembok Kode</h2>
+        <p class="note">Klik ▲ ▼ atau ketik angka. Enter membuka, Esc batal.</p>
+        <div class="dials">
+          <div class="dial"><button class="up">▲</button><div class="digit">0</div><button class="down">▼</button></div>
+          <div class="dial"><button class="up">▲</button><div class="digit">0</div><button class="down">▼</button></div>
+          <div class="dial"><button class="up">▲</button><div class="digit">0</div><button class="down">▼</button></div>
+        </div>
+        <p id="keypad-msg">&nbsp;</p>
+        <div class="buttons row">
+          <button id="btn-keypad-open" class="primary">Buka</button>
+          <button id="btn-keypad-cancel">Batal</button>
+        </div>
       </div>
     </div>
 

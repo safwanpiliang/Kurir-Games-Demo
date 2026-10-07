@@ -76,6 +76,14 @@ export const CONFIG = {
     },
   },
 
+  interact: {
+    radius: 2.2,             // jarak maksimum untuk menekan E
+  },
+
+  puzzles: {
+    gateOpenTime: 1.2,       // durasi animasi gerbang terbuka (s)
+  },
+
   camera: {
     fov: 60,
     distance: 6.0,           // jarak kamera ke kurir

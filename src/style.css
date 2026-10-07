@@ -282,3 +282,47 @@ kbd {
   #toast { top: 190px; white-space: normal; text-align: center; width: max-content; max-width: calc(100vw - 40px); }
   .bar-row { grid-template-columns: 48px minmax(80px, 160px) 34px 36px; }
 }
+
+/* ---------- Tombol lanjutkan ---------- */
+#btn-continue small {
+  display: block;
+  font-weight: normal;
+  font-size: 12px;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+#menu-start #btn-continue:not(.hidden) + #btn-start {
+  background: rgba(244, 236, 216, 0.08);
+  border-color: rgba(244, 236, 216, 0.25);
+  font-weight: normal;
+}
+
+/* ---------- Gembok kode ---------- */
+.dials {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin: 18px 0 6px;
+}
+.dial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.dial button { width: 64px; padding: 6px 0; font-size: 14px; }
+.dial .digit {
+  width: 64px;
+  padding: 10px 0;
+  border-radius: 10px;
+  background: var(--sand);
+  color: var(--ink);
+  font: bold 36px monospace;
+  border: 3px solid transparent;
+}
+.dial.active .digit { border-color: var(--gold); }
+#keypad-msg { min-height: 20px; margin: 8px 0 12px; color: var(--gold); }
+#keypad-msg.error { color: var(--red); }
+#keypad .panel.wrong { animation: shake 0.3s; }
+.buttons.row { flex-direction: row; justify-content: center; }
+.buttons.row button { min-width: 120px; }
